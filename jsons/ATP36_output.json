@@ -1,0 +1,32 @@
+{
+    "IBS (thread 1)": {
+        "NumberOfNodes": 48094
+    },
+    "IBS (thread 2)": {
+        "NumberOfNodes": 51052
+    },
+    "IBS (thread 3)": {
+        "NumberOfNodes": 52297
+    },
+    "IBS (thread 4)": {
+        "NumberOfNodes": 55674
+    },
+    "Solution": {
+        "FullWaste": 662238,
+        "FullWastePercentage": 13.28642623266564,
+        "NumberOfBins": 8,
+        "Time": 1.000945
+    },
+    "Solution1": {
+        "Algorithm": "IBS (thread 4) q 1",
+        "FullWastePercentage": 13.28642623266564,
+        "NumberOfBins": 8,
+        "Time": 0.0424582
+    },
+    "Solution2": {
+        "Algorithm": "IBS (thread 4) q 1",
+        "FullWastePercentage": 13.28642623266564,
+        "NumberOfBins": 5,
+        "Time": 0.0424582
+    }
+}

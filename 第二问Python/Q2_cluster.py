@@ -1,4 +1,5 @@
 # k-means 聚类
+from turtle import shape
 from numpy import unique
 from numpy import where
 from sklearn.datasets import make_classification
@@ -60,8 +61,13 @@ def P_Kmeans(X,k,p=False):
     if p==True:
         for index, kk in enumerate((3,4,5,6)):
             plt.subplot(2,2,index+1)
+            # y_pred: shape is (n,1) 每个样本所属的类别
             y_pred = KMeans(n_clusters=kk).fit_predict(X)
+            # score: 衡量数据组间和组内的离散度
             score= metrics.calinski_harabasz_score(X, y_pred)  
+            # c: shape is (n,1)  相当于每个点都有一个颜色标识
+            # print('X[:, 0]:\n',X[:, 0])
+            # 为什么直接取X[:, 0]和 X[:, 1]，应该是没有降维，简单代替了
             plt.scatter(X[:, 0], X[:, 1], c=y_pred)
             plt.text(.99, .01, ('k=%d, score: %.2f' % (kk,score)),
                         transform=plt.gca().transAxes, size=10,
@@ -72,7 +78,9 @@ def P_Kmeans(X,k,p=False):
         clusters = unique(y_pred)
         indexdict ={}
         for i in clusters:
+            # y_pred - (n,1); indexarr - (m,1)  行号
             indexarr = np.where(y_pred[:]==i)
+            # print('---indexarr:\n',indexarr)
             indexdict[i] = indexarr[0]
         return indexdict
 def Gau(X):
@@ -122,8 +130,9 @@ def P_Birch(X):
     plt.show()
 if __name__ =="__main__":
     # 定义数据集
-    data_1_predict_raw = pd.read_excel('./data/data_1_knn_IAQI.xlsx',sheet_name='监测点A逐小时污染物浓度与气象实测数据')
-    # X_out = data_1_predict_raw[['so2','no2','pm10','pm2.5','o3']]#,'co']]#,'direction']]#,'pressure'
+    # data_1_predict_raw = pd.read_excel('./data/data_1_knn_IAQI.xlsx',sheet_name='监测点A逐小时污染物浓度与气象实测数据')
+    data_1_predict_raw = pd.read_excel('./data/data_1_linear.xlsx',sheet_name='监测点A逐日污染物浓度实测数据')
+    X_out = data_1_predict_raw[['so2','no2','pm10','pm2.5','o3','co']]#,'direction']]#,'pressure'
     # X_out = data_1_predict_raw[['so2','no2','pm10','pm2.5','o3',]]#,'IAQI_SO_2','IAQI_NO_2','IAQI_PM_10','IAQI_PM_25','IAQI_O_3']]#,'co']]#,'direction']]#,'pressure'
     # X_out = data_1_predict_raw[['so2','no2','pm10','pm2.5','o3','temperature','humidity','pressure','wind','direction']]
     # X_out = data_1_predict_raw[['temperature','humidity','wind','direction','IAQI_SO_2','IAQI_NO_2','IAQI_PM_10','IAQI_PM_25','IAQI_O_3']]
@@ -139,11 +148,15 @@ if __name__ =="__main__":
     # Agg(X)
     # P_Birch(X)
     k = 3
-    indexdict = P_Kmeans(X,k,True)
+    P_Kmeans(X,k,True)
+    indexdict = P_Kmeans(X,k)
     # indexdict = minibatchKmeans(X,k,True)
-    X_all = data_1_predict_raw[['so2','no2','pm10','pm2.5','o3','co','temperature','humidity','pressure','wind','direction','aqi']].values
+    # X_all = data_1_predict_raw[['so2','no2','pm10','pm2.5','o3','co','temperature','humidity','pressure','wind','direction','aqi']].values
+
+    # print(indexdict)
+
     # 生成mat文件到MATLAB中绘图
-    io.savemat('./IAQI_data_3f/X_3all.mat', {'X_all': X_all})
-    io.savemat('./IAQI_data_3f/index1.mat', {'index1': indexdict[0]})
-    io.savemat('./IAQI_data_3f/index2.mat', {'index2': indexdict[1]})
-    io.savemat('./IAQI_data_3f/index3.mat', {'index3': indexdict[2]})
+    # io.savemat('./IAQI_data_3f/X_3all.mat', {'X_all': X_all})
+    # io.savemat('./IAQI_data_3f/index1.mat', {'index1': indexdict[0]})
+    # io.savemat('./IAQI_data_3f/index2.mat', {'index2': indexdict[1]})
+    # io.savemat('./IAQI_data_3f/index3.mat', {'index3': indexdict[2]})
