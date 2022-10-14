@@ -9,13 +9,13 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_colors_batch(data_path="D:\\AYEAR1\\math_model\\2022\ÎÊÌâ¶ş\\solution5"):
+def plot_colors_batch(data_path="D:\\AYEAR1\\math_model\\2022\é—®é¢˜äºŒ\\solution5"):
     #<class 'pandas.core.frame.DataFrame'>
     csv_all=os.listdir(data_path)
-    x=[]#¶©µ¥
-    y=[]#×éÅú²ÄÁÏÖÖÀàÊı
-    z=[]#Åú×é¶ÔÓ¦Ô­Ê¼¶©µ¥µÄ»¨É«ÊıÖ®ºÍ
-    pos=[]#Î»ÖÃ
+    x=[]#è®¢å•
+    y=[]#ç»„æ‰¹ææ–™ç§ç±»æ•°
+    z=[]#æ‰¹ç»„å¯¹åº”åŸå§‹è®¢å•çš„èŠ±è‰²æ•°ä¹‹å’Œ
+    pos=[]#ä½ç½®
     PLATE_ID=[]
     NODE_ID=[]
     X=[]
@@ -35,7 +35,7 @@ def plot_colors_batch(data_path="D:\\AYEAR1\\math_model\\2022\ÎÊÌâ¶ş\\solution5"
         # x.append(csv.split('.')[0])
         # pos.append(int(csv.split('.')[0].split("-")[-1])) 
 
-        # plate_times:Ã¿¸ö°åÊ¹ÓÃµÄ´ÎÊı
+        # plate_times:æ¯ä¸ªæ¿ä½¿ç”¨çš„æ¬¡æ•°
         plate_times=list(data['PLATE_ID'].value_counts(sort=False))  
         flag=0 
         for i in range(len(data['PLATE_ID'])):
@@ -44,7 +44,7 @@ def plot_colors_batch(data_path="D:\\AYEAR1\\math_model\\2022\ÎÊÌâ¶ş\\solution5"
                 NODE_ID.append(data['NODE_ID'][i])
             else:
                 
-                #Í³¼Æ0µÄ¸öÊı
+                #ç»Ÿè®¡0çš„ä¸ªæ•°
                 if flag < plate_times[int(data['PLATE_ID'][i])] and flag==0:
                     PLATE_ID.append(PLATE_ID[-1]+1)
                     flag+=1
@@ -75,8 +75,8 @@ def plot_colors_batch(data_path="D:\\AYEAR1\\math_model\\2022\ÎÊÌâ¶ş\\solution5"
     df=pd.DataFrame(dic)
     # df=df.sort_values(by='item_pos')
     # print('---df:\n',df)
-    #´æÈëcsv
-    csv_des="D:\\AYEAR1\\math_model\\2022\ÎÊÌâ¶ş"
+    #å­˜å…¥csv
+    csv_des="D:\\AYEAR1\\math_model\\2022\é—®é¢˜äºŒ"
     df.to_csv(csv_des+"\\"+data_path.split("\\")[-1]+".csv",index=False)
 
 def test():
@@ -92,12 +92,39 @@ def test():
 # test()
 
 def scrapy_svg():
-    import requests
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'}
-    url = 'https://librallu.gitlab.io/packing-viz/'
-    payload={'content': '30¶øÁ¢','activityId': ''}
-    # response = requests.request("POST", url, headers=headers, data=payload, files=files)
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    import time
+    import pywinauto
 
-    res = requests.get(url, headers=headers,verify=False).text
-    print(res)
-# scrapy_svg()
+    chrome_driver="D:\\APPS\\Anaconda\\anaconda3\\envs\\allOne\\Lib\\site-packages\\selenium\\webdriver\\chrome\\chromedriver.exe"
+    driver = webdriver.Chrome(executable_path=chrome_driver)
+    wait=WebDriverWait(driver,10)
+    driver.get('https://librallu.gitlab.io/packing-viz/')
+    # driver.switch_to.frame("limitsvg")
+
+    elem_xpath='//*[@id="app"]/div/header/div/div[3]/div[1]/div/div[1]/div[1]/div'
+    element=wait.until(EC.element_to_be_clickable((By.XPATH, elem_xpath)))
+
+    elem = driver.find_elements(By.XPATH,elem_xpath)
+    print('---:\n',elem[0])
+    elem[0].click()
+
+    time.sleep(1)
+    # é€šè¿‡çª—å£æ‰“å¼€
+    app = pywinauto.Desktop()
+    # é€šè¿‡å¼¹æ¡†åç§°è¿›å…¥æ§ä»¶ä¸­
+    win = app['æ‰“å¼€']
+    # è¾“å…¥ä¸Šä¼ å›¾ç‰‡çš„åœ°å€
+    win['æ‰“å¼€'].type_keys(r'D:\\AYEAR1\\math_model\\2022\\é—®é¢˜äºŒ\\solution1\\dataB1-0-0-solution.csv')
+    #ç‚¹å‡»æ‰“å¼€æŒ‰é’®
+    win['Button'].click()
+
+def main():
+    # plot_colors_batch()
+    # test()
+    scrapy_svg()
+
+main()
